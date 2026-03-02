@@ -5,6 +5,8 @@ import Main from "./components/Main";
 import Logo from "./components/Navbar/Logo";
 import SearchBox from "./components/Navbar/SearchBox";
 import NumberResult from "./components/Navbar/NumberResult";
+import AllMoviesList from "./components/AllMoviesList";
+import WatchedMovies from "./components/WatchedMovies";
 
 
 
@@ -34,7 +36,10 @@ const avgRuntime = average(watched.map((movie) => movie.runtime));
         <SearchBox/>
         <NumberResult movies={movies} />
       </Navbar>
-      <Main movies={movies} />
+      <Main >
+        <AllMoviesList  movies={movies} />
+        <WatchedMovies  />
+      </Main>
     </>
   );
 }

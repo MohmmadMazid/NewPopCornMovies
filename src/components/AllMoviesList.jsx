@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import MovieList from './Movies'
+import Movies from './Movies'
 
 const AllMoviesList = ({movies}) => {
     const [isOpen1, setIsOpen1] = useState(true);
@@ -16,7 +16,7 @@ const AllMoviesList = ({movies}) => {
           {isOpen1 && (
             <ul className="list">
               {movies?.map((movie) => (
-                <MovieList  movie={movie} key={movie.imdbID} />
+                <Movies  movie={movie} key={movie.imdbID} />
               ))}
             </ul>
           )}
