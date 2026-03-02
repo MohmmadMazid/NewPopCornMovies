@@ -1,5 +1,4 @@
-import React from 'react'
-
+//  this is  a presentational componnet 
 const Movies = ({movie}) => {
     return (
             <li >
