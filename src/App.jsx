@@ -40,7 +40,7 @@ export default function App() {
   // this for the selecting the movie 
   const handleSelected = (id) => {
     setSelectdId((selectdId) => id === selectdId ? null : id)
-    console.log(selectdId)
+    // console.log(selectdId)
   }
 
   // this function is for closing the movie
@@ -73,7 +73,7 @@ export default function App() {
       <Main >
         {<AllMoviesList movies={movies} handleSelected={handleSelected} loading={loading} error={error} handleWatchedMovie={handleWatchedMovie} />}
         {/* {!loading && !error ?<Loader/>:<AllMoviesList  movies={movies} />} */}
-        <WatchedMovies watched={watched} setWatched={setWatched} selectdId={selectdId} handleCloseMovie={handleCloseMovie} />
+        <WatchedMovies watched={watched} setWatched={setWatched} selectdId={selectdId} handleCloseMovie={handleCloseMovie} handleWatchedMovie={handleWatchedMovie} />
       </Main>
     </>
   );

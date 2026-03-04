@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Loader from "./Loader"
 import StarRating from '../StarRattingComponent/StarRating';
 
-const MovieDetails = ({ selectdId, handleCloseMovie }) => {
+const MovieDetails = ({ selectdId, handleCloseMovie, handleWatchedMovie }) => {
     const [movie, setMovie] = useState({})
     const [loading, setLoading] = useState(true);
     const KEY = "328a19de";
@@ -17,12 +17,26 @@ const MovieDetails = ({ selectdId, handleCloseMovie }) => {
         Director: director,
         Genre: genre } = movie
 
-    console.log("hello ", title, imdbRating, actors)
+    // console.log("hello ", title, imdbRating, actors)
+    const handleAddMovieToWachedList = () => {
+
+        const newWatchedMovie = {
+            imdbID: selectdId,
+            title,
+            year,
+            poster,
+            imdbRating: Number(imdbRating),
+            runtime: Number(runtime.split(" ").at(0))
+
+        }
+        handleWatchedMovie(newWatchedMovie)
+        handleCloseMovie()
+    }
     useEffect(() => {
         const getMovieDetail = async () => {
             const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&i=${selectdId}`)
             const data = await res.json();
-            console.log("movie detail inside the movie details component ", data)
+            // console.log("movie detail inside the movie details component ", data)
             setMovie(data);
             setLoading(false)
         }
@@ -30,6 +44,11 @@ const MovieDetails = ({ selectdId, handleCloseMovie }) => {
         getMovieDetail();
     }, [selectdId])
 
+
+
+    const handleRating = () => {
+        console.log("rating")
+    }
     return (
         <div className='details'>
             {loading ? <Loader /> : (
@@ -46,6 +65,7 @@ const MovieDetails = ({ selectdId, handleCloseMovie }) => {
                     <section>
                         <div className='rating'>
                             <StarRating length={10} size="18" />
+                            <button className='btn-add' onClick={handleAddMovieToWachedList}>add to list</button>
 
                         </div>
                         <p>

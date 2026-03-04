@@ -1,13 +1,14 @@
 //  this is  a presentational componnet 
-const Movies = ({ movie, handleSelected, handleWatchedMovie }) => {
+const Movies = ({ movie, handleSelected }) => {
     // console.log(movie)
 
 
     return (
         <li role="button" onClick={() => {
             handleSelected(movie.imdbID);
-            handleWatchedMovie(movie);
-        }} >
+            handleWatchedMovie(movie);  // we are doing adding the movie inside the movieDetialed
+        }}
+        >
             <img src={movie.Poster} alt={`${movie.Title} poster`} />
             <h3>{movie.Title}</h3>
             <div>
