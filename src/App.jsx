@@ -19,9 +19,11 @@ export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [selectdId, setSelectdId] = useState(null);
+  const [watched, setWatched] = useState([]);
+
 
   const KEY = "328a19de";
-
   const queryParam = "Parasite"
   useEffect(() => {
     setLoading(true);
@@ -35,6 +37,29 @@ export default function App() {
     }
     fetchMovie();
   }, [query])
+  // this for the selecting the movie 
+  const handleSelected = (id) => {
+    setSelectdId((selectdId) => id === selectdId ? null : id)
+    console.log(selectdId)
+  }
+
+  // this function is for closing the movie
+
+  const handleCloseMovie = () => {
+    setSelectdId(null);
+    console.log(selectdId);
+
+  }
+
+  // this function is for the adding the watched movie into the watched movie array 
+
+  const handleWatchedMovie = (movie) => {
+
+    setWatched((preWatched) => {
+      return [...preWatched, movie];
+    });
+    console.log(watched)
+  }
 
   return (
     <>
@@ -46,10 +71,9 @@ export default function App() {
         <NumberResult movies={movies} />
       </Navbar>
       <Main >
-        {loading && <Loader />}
-        {!loading && !error && <AllMoviesList movies={movies} />}
+        {<AllMoviesList movies={movies} handleSelected={handleSelected} loading={loading} error={error} handleWatchedMovie={handleWatchedMovie} />}
         {/* {!loading && !error ?<Loader/>:<AllMoviesList  movies={movies} />} */}
-        <WatchedMovies />
+        <WatchedMovies watched={watched} setWatched={setWatched} selectdId={selectdId} handleCloseMovie={handleCloseMovie} />
       </Main>
     </>
   );
