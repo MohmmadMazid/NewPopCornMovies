@@ -5,7 +5,7 @@ import { tempWatchedData } from '../moviesdata';
 import MovieDetails from './MovieDetails';
 
 
-const WatchedMovies = ({ selectdId, handleCloseMovie, watched, setWatched, handleWatchedMovie }) => {
+const WatchedMovies = ({ selectdId, handleCloseMovie, watched, setWatched, handleWatchedMovie, handleDeleteWatchedMovie }) => {
     // const [watched, setWatched] = useState(tempWatchedData);
     const [isOpen2, setIsOpen2] = useState(true);
     return (
@@ -19,11 +19,11 @@ const WatchedMovies = ({ selectdId, handleCloseMovie, watched, setWatched, handl
             {isOpen2 && (
                 <>
                     {
-                        selectdId ? <MovieDetails selectdId={selectdId} handleCloseMovie={handleCloseMovie} handleWatchedMovie={handleWatchedMovie} />
+                        selectdId ? <MovieDetails selectdId={selectdId} handleCloseMovie={handleCloseMovie} handleWatchedMovie={handleWatchedMovie} watched={watched} />
                             :
                             <>
                                 <MoviesYouWatched watched={watched} />
-                                <WatchedMoveisList watched={watched} selectdId={selectdId} />
+                                <WatchedMoveisList watched={watched} selectdId={selectdId} handleDeleteWatchedMovie={handleDeleteWatchedMovie} />
                             </>
                     }
                 </>

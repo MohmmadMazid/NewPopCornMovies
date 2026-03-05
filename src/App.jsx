@@ -25,29 +25,42 @@ export default function App() {
 
   const KEY = "328a19de";
   const queryParam = "Parasite"
+
   useEffect(() => {
+    // abortcontroller will cancel the unwanted network request 
+    const controller = new AbortController();
     setLoading(true);
     const fetchMovie = async () => {
-      const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${query}`)
+      try {
 
-      const data = await res.json();
-      setLoading(false);
-      // console.log(data)
-      setMovies(data?.Search || []);
+        const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${query}`, { signal: controller.signal })
+        // const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${query}`, { signal: controller })
+
+        const data = await res.json();
+        setLoading(false);
+        setMovies(data?.Search || []);
+      } catch (err) {
+        if (err.name !== "AbortError") {
+          console.error(err);
+        }
+      }
     }
+    handleCloseMovie();
     fetchMovie();
+    // clean up function for canceling the unwanted newtwork request
+    return () => {
+      controller.abort();
+    }
   }, [query])
   // this for the selecting the movie 
   const handleSelected = (id) => {
     setSelectdId((selectdId) => id === selectdId ? null : id)
-    // console.log(selectdId)
   }
 
   // this function is for closing the movie
 
   const handleCloseMovie = () => {
     setSelectdId(null);
-    console.log(selectdId);
 
   }
 
@@ -58,9 +71,11 @@ export default function App() {
     setWatched((preWatched) => {
       return [...preWatched, movie];
     });
-    console.log(watched)
   }
 
+  const handleDeleteWatchedMovie = (id) => {
+    setWatched((watched) => (watched.filter((movie) => (movie.imdbID !== id))));
+  }
   return (
     <>
 
@@ -73,7 +88,7 @@ export default function App() {
       <Main >
         {<AllMoviesList movies={movies} handleSelected={handleSelected} loading={loading} error={error} handleWatchedMovie={handleWatchedMovie} />}
         {/* {!loading && !error ?<Loader/>:<AllMoviesList  movies={movies} />} */}
-        <WatchedMovies watched={watched} setWatched={setWatched} selectdId={selectdId} handleCloseMovie={handleCloseMovie} handleWatchedMovie={handleWatchedMovie} />
+        <WatchedMovies watched={watched} setWatched={setWatched} selectdId={selectdId} handleCloseMovie={handleCloseMovie} handleWatchedMovie={handleWatchedMovie} handleDeleteWatchedMovie={handleDeleteWatchedMovie} />
       </Main>
     </>
   );

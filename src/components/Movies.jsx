@@ -6,7 +6,7 @@ const Movies = ({ movie, handleSelected }) => {
     return (
         <li role="button" onClick={() => {
             handleSelected(movie.imdbID);
-            handleWatchedMovie(movie);  // we are doing adding the movie inside the movieDetialed
+            // handleWatchedMovie(movie);  // we are doing adding the movie inside the movieDetialed
         }}
         >
             <img src={movie.Poster} alt={`${movie.Title} poster`} />

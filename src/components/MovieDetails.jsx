@@ -2,9 +2,15 @@ import React, { useEffect, useState } from 'react'
 import Loader from "./Loader"
 import StarRating from '../StarRattingComponent/StarRating';
 
-const MovieDetails = ({ selectdId, handleCloseMovie, handleWatchedMovie }) => {
+const MovieDetails = ({ watched, selectdId, handleCloseMovie, handleWatchedMovie }) => {
+    const [userRating, setUserRating] = useState("")
     const [movie, setMovie] = useState({})
     const [loading, setLoading] = useState(true);
+    const isWatched = watched.map((movie) => movie.imdbID).includes(selectdId)
+    const watchedUserRating = watched.find((movie) => movie.imdbID == selectdId)?.userRating
+    console.log("isWatched ", isWatched)
+
+
     const KEY = "328a19de";
     const { Title: title,
         Year: year,
@@ -26,12 +32,29 @@ const MovieDetails = ({ selectdId, handleCloseMovie, handleWatchedMovie }) => {
             year,
             poster,
             imdbRating: Number(imdbRating),
-            runtime: Number(runtime.split(" ").at(0))
+            runtime: Number(runtime.split(" ").at(0)),
+            userRating,
 
         }
         handleWatchedMovie(newWatchedMovie)
         handleCloseMovie()
     }
+    // useEffect functionality when we perform some event by clicking the button 
+
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === "Enter") {
+                handleCloseMovie();
+                console.log("close");
+            }
+        };
+
+        document.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [handleCloseMovie]);
     useEffect(() => {
         const getMovieDetail = async () => {
             const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&i=${selectdId}`)
@@ -42,9 +65,18 @@ const MovieDetails = ({ selectdId, handleCloseMovie, handleWatchedMovie }) => {
         }
 
         getMovieDetail();
+
     }, [selectdId])
 
+    useEffect(() => {
+        if (!title) return;
+        document.title = `Movie | ${title}`
 
+        return () => {
+            document.title = "popcornMovies "
+        }
+
+    }, [title])
 
     const handleRating = () => {
         console.log("rating")
@@ -64,9 +96,18 @@ const MovieDetails = ({ selectdId, handleCloseMovie, handleWatchedMovie }) => {
                     </header>
                     <section>
                         <div className='rating'>
-                            <StarRating length={10} size="18" />
-                            <button className='btn-add' onClick={handleAddMovieToWachedList}>add to list</button>
-
+                            {!isWatched ? (
+                                <>
+                                    <StarRating length={10} size="18" setMovieRating={setUserRating} />
+                                    {userRating > 0 && (
+                                        <button className='btn-add' onClick={handleAddMovieToWachedList}>
+                                            + add to list
+                                        </button>
+                                    )}
+                                </>
+                            ) : (
+                                <p>You have rated this movie {watchedUserRating} ✨</p>
+                            )}
                         </div>
                         <p>
                             <em>{plot}</em>
