@@ -54,8 +54,12 @@ body {
   max-width: 42rem;
   background-color: var(--color-background-500);
   border-radius: 0.9rem;
+<<<<<<< HEAD
   overflow: auto;
   scrollbar-width: none;
+=======
+  overflow: hidden;
+>>>>>>> b481925f4c51918eb229cbce41040e1dfaeaac0c
   position: relative;
 }
 
