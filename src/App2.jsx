@@ -20,22 +20,17 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [selectdId, setSelectdId] = useState(null);
-  const watchedMoviesFromLocalStorage = JSON.parse(localStorage.getItem('watched'))||[];
-  const [watched, setWatched] = useState(watchedMoviesFromLocalStorage);
+  const [watched, setWatched] = useState([]);
 
 
   const KEY = "328a19de";
+  const queryParam = "Parasite"
 
-  
-    const handleCloseMovie = () => {
-      setSelectdId(null);
-  
-    }
   useEffect(() => {
     // abortcontroller will cancel the unwanted network request 
     const controller = new AbortController();
+    setLoading(true);
     const fetchMovie = async () => {
-      setLoading(true);
       try {
 
         const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${query}`, { signal: controller.signal })
@@ -64,31 +59,23 @@ export default function App() {
 
   // this function is for closing the movie
 
+  const handleCloseMovie = () => {
+    setSelectdId(null);
+
+  }
+
   // this function is for the adding the watched movie into the watched movie array 
 
   const handleWatchedMovie = (movie) => {
 
     setWatched((preWatched) => {
-      // const updatedwatched = [...preWatched,movie]
-      // localStorage.setItem('watched',JSON.stringify(updatedwatched))
       return [...preWatched, movie];
-      // return updatedwatched;
     });
   }
 
   const handleDeleteWatchedMovie = (id) => {
-    // const afterDeletingwatchedMoviedata = JSON.parse(localStorage.getItem('watched')).filter((movie)=>movie.imdbID!==id)
     setWatched((watched) => (watched.filter((movie) => (movie.imdbID !== id))));
-    // localStorage.setItem('watched',JSON.stringify(afterDeletingwatchedMoviedata))
-    // setWatched(JSON.parse(localStorage.getItem('watched')))
   }
-
-
-  // this will help to remove the items from the localStorage 
-    
-  useEffect(()=>{
-    localStorage.setItem('watched',JSON.stringify(watched))
-  },[watched])
   return (
     <>
 

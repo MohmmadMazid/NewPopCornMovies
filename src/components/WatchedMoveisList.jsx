@@ -3,7 +3,7 @@ import Watched from './Watched'
 import MovieDetails from './MovieDetails';
 
 
-const WatchedMoveisList = ({ watched, selectdId, selectCloseMovie, handleDeleteWatchedMovie }) => {
+const WatchedMoveisList = ({ watched, handleDeleteWatchedMovie }) => {
   return (
 
     // selectdId ? <MovieDetails selectdId={selectdId} selectCloseMovie={selectCloseMovie} /> :

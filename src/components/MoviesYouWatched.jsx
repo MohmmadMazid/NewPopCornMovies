@@ -5,6 +5,7 @@ const MoviesYouWatched = ({ watched }) => {
 
   const average = (arr) =>
     arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0)
+  
 
   const avgImdbRating = average(watched.map((movie) => movie.imdbRating)).toFixed(2);
   const avgUserRating = average(watched.map((movie) => movie.userRating)).toFixed(2);

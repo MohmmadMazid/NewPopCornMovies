@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const SearchBox = ({ query, setQuery }) => {
 
@@ -6,6 +6,11 @@ const SearchBox = ({ query, setQuery }) => {
     setQuery(e.target.value)
     console.log(e.target.value)
   }
+
+  useEffect(()=>{
+    const el = document.querySelector(".search");
+    el.focus();
+  },[query])
   return (
     <input
       className="search"
