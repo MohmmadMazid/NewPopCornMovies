@@ -8,6 +8,7 @@ import NumberResult from "./components/Navbar/NumberResult";
 import AllMoviesList from "./components/AllMoviesList";
 import WatchedMovies from "./components/WatchedMovies";
 import Loader from "./components/Loader";
+import { useMovies } from "./customHook/useMovies";
 
 
 
@@ -16,8 +17,8 @@ import Loader from "./components/Loader";
 
 export default function App() {
   const [query, setQuery] = useState("");
-  const [movies, setMovies] = useState(tempMovieData);
-  const [loading, setLoading] = useState(false);
+  // const [movies, setMovies] = useState(tempMovieData);
+  // const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [selectdId, setSelectdId] = useState(null);
   const watchedMoviesFromLocalStorage = JSON.parse(localStorage.getItem('watched'))||[];
@@ -31,33 +32,39 @@ export default function App() {
       setSelectdId(null);
   
     }
-  useEffect(() => {
-    // abortcontroller will cancel the unwanted network request 
-    const controller = new AbortController();
-    const fetchMovie = async () => {
-      setLoading(true);
-      try {
 
-        const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${query}`, { signal: controller.signal })
-        // const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${query}`, { signal: controller })
+    // useEffect(() => {
+      //   // abortcontroller will cancel the unwanted network request 
+      //   const controller = new AbortController();
+      //   const fetchMovie = async () => {
+        //     setLoading(true);
+        //     try {
+          
+        //       const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${query}`, { signal: controller.signal })
+        //       // const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=${query}`, { signal: controller })
+        
+        //       const data = await res.json();
+        //       setLoading(false);
+        //       setMovies(data?.Search || []);
+        //     } catch (err) {
+          //       if (err.name !== "AbortError") {
+            //         console.error(err);
+            //       }
+            //     }
+            //   }
+            //   handleCloseMovie();
+            //   fetchMovie();
+            //   // clean up function for canceling the unwanted newtwork request
+            //   return () => {
+              //     controller.abort();
+              //   }
+              // }, [query])
 
-        const data = await res.json();
-        setLoading(false);
-        setMovies(data?.Search || []);
-      } catch (err) {
-        if (err.name !== "AbortError") {
-          console.error(err);
-        }
-      }
-    }
-    handleCloseMovie();
-    fetchMovie();
-    // clean up function for canceling the unwanted newtwork request
-    return () => {
-      controller.abort();
-    }
-  }, [query])
-  // this for the selecting the movie 
+
+  // instead of using the above code to fetch the movie detail we write the custom hook to fetch the movies detail
+  const[movies,loading]=useMovies(query,handleCloseMovie)
+
+   // this for the selecting the movie 
   const handleSelected = (id) => {
     setSelectdId((selectdId) => id === selectdId ? null : id)
   }

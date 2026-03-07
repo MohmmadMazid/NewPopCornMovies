@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Loader from "./Loader"
 import StarRating from '../StarRattingComponent/StarRating';
+import { useKey } from '../customHook/useKey';
 
 const MovieDetails = ({ watched, selectdId, handleCloseMovie, handleWatchedMovie }) => {
     const [userRating, setUserRating] = useState("")
@@ -41,20 +42,26 @@ const MovieDetails = ({ watched, selectdId, handleCloseMovie, handleWatchedMovie
     }
     // useEffect functionality when we perform some event by clicking the button 
 
-    useEffect(() => {
-        const handleKeyDown = (e) => {
-            if (e.key === "Enter") {
-                handleCloseMovie();
-                console.log("close");
-            }
-        };
+    // useEffect(() => {
+    //     const handleKeyDown = (e) => {
+    //         if (e.key === "Enter") {
+    //             handleCloseMovie();
+    //             console.log("close");
+    //         }
+    //     };
 
-        document.addEventListener("keydown", handleKeyDown);
+    //     document.addEventListener("keydown", handleKeyDown);
 
-        return () => {
-            document.removeEventListener("keydown", handleKeyDown);
-        };
-    }, [handleCloseMovie]);
+    //     return () => {
+    //         document.removeEventListener("keydown", handleKeyDown);
+    //     };
+    // }, [handleCloseMovie]);
+
+
+    // instead of using above function useEffect we have created the useKey custom hook 
+    useKey('Escape',function(){
+        handleCloseMovie();
+    })
     useEffect(() => {
         const getMovieDetail = async () => {
             const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&i=${selectdId}`)
